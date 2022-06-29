@@ -6,6 +6,7 @@ export default function UserList(props){
   const [ userData , setUserData ] = useState(_.cloneDeep(props.users)) 
   const [ isDelete , setDelete ] = useState(false)
   const [curruntUser , setCurruntUser] = useState()
+  const [order , setOrder] = useState("ASC")
   const searchRefs = useRef()
 
   const handleDelete = (user) => {
@@ -16,6 +17,7 @@ export default function UserList(props){
 
   useEffect(() => {
       searchRefs.current.value = ""
+      setOrder("ASC")
      setUserData(props.users)
   },[props.users])
 
@@ -30,12 +32,27 @@ export default function UserList(props){
            : props.users
         setUserData(filterData)    
   }
+
+  const handleSort = (col) => {
+   if(order === 'ASC'){
+    const sorted = [...userData].sort((a,b)=>
+    a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1)
+    setUserData(sorted)
+    setOrder("DSC")
+   }else {
+    const sorted = [...userData].sort((a,b)=>
+    a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1)
+    setUserData(sorted)
+    setOrder("ASC")
+   }  
+  } 
   
 
     return(
         <div>
           <div><div><label>Search Name</label><input ref={searchRefs}  onChange={searchHandler} /></div></div>
-          <div><button>SortBY</button></div>
+          <div><button onClick={() => handleSort("name")}>Sort By Name</button></div>
+          <div><button onClick={() => handleSort("Address")}>Sort By Address</button></div>
           {
             userData.length > 0 
              ?
