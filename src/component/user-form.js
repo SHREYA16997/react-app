@@ -62,7 +62,7 @@ export default function Adduser(){
           </div>
           <div>
             {
-                userList.length > 0 ?  <UserList users={userList} setUser={setUserList}/> : null
+                userList.length > 0 ?  <UserList users={userList}/> : null
             }
           </div>
         </div>
