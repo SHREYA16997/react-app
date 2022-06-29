@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DeleteConfirm from "./delete-comfirmation";
 import _ from 'lodash'
 
@@ -6,13 +6,18 @@ export default function UserList(props){
   const [ userData , setUserData ] = useState(_.cloneDeep(props.users)) 
   const [ isDelete , setDelete ] = useState(false)
   const [curruntUser , setCurruntUser] = useState()
-  const [searchString , setSearchString] = useState('')
+  const searchRefs = useRef()
 
   const handleDelete = (user) => {
     console.log(user)
      setCurruntUser(user)
      setDelete(true)
   }
+
+  useEffect(() => {
+      searchRefs.current.value = ""
+     setUserData(props.users)
+  },[props.users])
 
   const searchHandler = (e) => {      
         const filterData = e.target.value !=='' ? props.users.filter((el)=> {
@@ -25,10 +30,12 @@ export default function UserList(props){
            : props.users
         setUserData(filterData)    
   }
+  
 
     return(
         <div>
-          <div><div><label>Search Name</label><input  onChange={searchHandler} /></div></div>
+          <div><div><label>Search Name</label><input ref={searchRefs}  onChange={searchHandler} /></div></div>
+          <div><button>SortBY</button></div>
           {
             userData.length > 0 
              ?
